@@ -51,7 +51,6 @@ public class DefaultMapInContent<W> implements MapInContent<W> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<W> iterator() {
 		return (Iterator<W>) provider.values(content);
