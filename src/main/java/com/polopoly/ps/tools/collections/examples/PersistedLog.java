@@ -40,7 +40,7 @@ import com.polopoly.util.policy.PolicyUtil;
 public class PersistedLog {
 	static final Logger LOGGER = Logger.getLogger(PersistedLog.class.getName());
 
-	PolicyUtil policy;
+	private PolicyUtil policy;
 
 	private QueueInContent<MapStorage<String, String>> queue;
 
@@ -49,12 +49,6 @@ public class PersistedLog {
 
 	private static final MapStorageProvider<String, String> provider = new MapStorageProvider<String, String>(
 			storage, new StringConverter());
-
-	protected static final String DATE = "date";
-
-	protected static final String CONTENT_ID = "contentId";
-
-	protected static final String EVENT = "event";
 
 	private static final String GLOBAL_LOG_EXTERNAL_ID = "globalLog";
 

@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 import com.polopoly.ps.tools.collections.ComponentStorage;
 import com.polopoly.util.policy.PolicyUtil;
 
-public class DefaultEditableQueueInContent<W> extends
-		DefaultQueueInContent<W> implements EditableQueueInContent<W> {
+public class DefaultEditableQueueInContent<W> extends DefaultQueueInContent<W>
+		implements EditableQueueInContent<W> {
 	private static final Logger LOGGER = Logger
 			.getLogger(DefaultEditableListInContent.class.getName());
 
@@ -52,6 +52,12 @@ public class DefaultEditableQueueInContent<W> extends
 	private void setStart(int start) {
 		positionStorage.setComponent(content, POSITION_GROUP, START_COMPONENT,
 				start);
+	}
+
+	@Override
+	public void clear() {
+		setStart(0);
+		setEnd(0);
 	}
 
 }
