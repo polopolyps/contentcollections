@@ -16,6 +16,10 @@ public class StringConverter implements Converter<String> {
 
 	@Override
 	public String toString(String string) {
+		if (string == null) {
+			string = "";
+		}
+
 		return string;
 	}
 
