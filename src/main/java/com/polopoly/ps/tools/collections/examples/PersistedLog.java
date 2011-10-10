@@ -54,6 +54,11 @@ public class PersistedLog {
 
 	private static final int GLOBAL_LOG_SIZE = 1024;
 
+    public static final String EVENT = "event";
+    public static final String CONTENT_ID = "contentid";
+    public static final String DATE = "date";
+    
+
 	private PersistedLog(PolicyUtil policy, int maxSize) {
 		this.policy = Require.require(policy);
 
