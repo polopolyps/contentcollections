@@ -12,6 +12,9 @@ import org.junit.Test;
 
 import com.polopoly.cm.client.CMException;
 import com.polopoly.ps.test.AbstractIntegrationTest;
+import com.polopoly.ps.test.client.ClientInitializer;
+import com.polopoly.ps.test.client.NoSuchServiceException;
+import com.polopoly.ps.test.client.PolopolyTestClientInitializer;
 import com.polopoly.ps.tools.collections.exception.NoSuchEntryException;
 import com.polopoly.ps.tools.collections.exception.NoValueSetException;
 import com.polopoly.ps.tools.collections.incontent.EditableListInContent;
@@ -24,6 +27,15 @@ public abstract class AbstractContentInListIntegrationTest<W> extends
 		AbstractIntegrationTest {
 	protected ListInContent<W> list;
 	protected PolicyUtil policy;
+
+	@Override
+	protected ClientInitializer getInitializer() throws NoSuchServiceException {
+		PolopolyTestClientInitializer result = new PolopolyTestClientInitializer();
+		
+		result.setAttachSolr(false);
+		
+		return result;
+	}
 
 	@Before
 	public void setUp() throws Exception {
