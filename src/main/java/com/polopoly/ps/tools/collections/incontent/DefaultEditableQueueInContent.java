@@ -6,26 +6,24 @@ import java.util.logging.Logger;
 import com.polopoly.ps.tools.collections.ComponentStorage;
 import com.polopoly.util.policy.PolicyUtil;
 
-public class DefaultEditableQueueInContent<W> extends DefaultQueueInContent<W>
-		implements EditableQueueInContent<W> {
-	private static final Logger LOGGER = Logger
-			.getLogger(DefaultEditableListInContent.class.getName());
+public class DefaultEditableQueueInContent<W> extends DefaultQueueInContent<W> implements
+		EditableQueueInContent<W> {
+	private static final Logger LOGGER = Logger.getLogger(DefaultEditableListInContent.class.getName());
 
-	public DefaultEditableQueueInContent(PolicyUtil policy,
-			ComponentCollectionProvider<W> provider,
-			ComponentStorage<?> storage, int maxSize) {
-		super(policy, provider, storage, maxSize);
+	public DefaultEditableQueueInContent(PolicyUtil policy, ComponentCollectionProvider<W> provider,
+			ComponentStorage<?> storage, int bufferSize) {
+		super(policy, provider, storage, bufferSize);
 	}
 
 	@Override
 	public W push() {
 		int oldEnd = getEnd();
-		int newEnd = (oldEnd + 1) % maxSize;
+		int newEnd = (oldEnd + 1) % bufferSize;
 
 		setEnd(newEnd);
 
 		if (newEnd == getStart()) {
-			setStart((getStart() + 1) % maxSize);
+			setStart((getStart() + 1) % bufferSize);
 		}
 
 		return provider.create(KEY_CONVERTER.toString(oldEnd), content);
@@ -39,19 +37,17 @@ public class DefaultEditableQueueInContent<W> extends DefaultQueueInContent<W>
 		}
 
 		int oldStart = getStart();
-		int newStart = (oldStart + 1) % maxSize;
+		int newStart = (oldStart + 1) % bufferSize;
 
 		setStart(newStart);
 	}
 
 	private void setEnd(int end) {
-		positionStorage.setComponent(content, POSITION_GROUP, END_COMPONENT,
-				end);
+		positionStorage.setComponent(content, POSITION_GROUP, END_COMPONENT, end);
 	}
 
 	private void setStart(int start) {
-		positionStorage.setComponent(content, POSITION_GROUP, START_COMPONENT,
-				start);
+		positionStorage.setComponent(content, POSITION_GROUP, START_COMPONENT, start);
 	}
 
 	@Override

@@ -25,17 +25,17 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 	private ContentUtil content;
 	private String outerKey;
 
-	private int maxSize;
+	private int bufferSize;
 
 	public MapStorageToQueueStorageWrapper(Storage<Integer, T> delegate,
 			ComponentStorage<?> storage, ContentUtil content, String outerKey,
-			int maxSize) {
+			int bufferSize) {
 		this.delegate = require(delegate);
 		this.positionStorage = require(storage).getOtherwiseTypedStorage(
 				new IntegerConverter());
 		this.content = require(content);
 		this.outerKey = require(outerKey);
-		this.maxSize = maxSize;
+		this.bufferSize = bufferSize;
 	}
 
 	private T get(int index) throws IndexOutOfBoundsException {
@@ -95,19 +95,19 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 		if (end >= start) {
 			return end - start;
 		} else {
-			return end - start + maxSize;
+			return end - start + bufferSize;
 		}
 	}
 
 	@Override
 	public void push(T value) {
 		int oldEnd = getEnd();
-		int newEnd = (oldEnd + 1) % maxSize;
+		int newEnd = (oldEnd + 1) % bufferSize;
 
 		setEnd(newEnd);
 
 		if (newEnd == getStart()) {
-			setStart((getStart() + 1) % maxSize);
+			setStart((getStart() + 1) % bufferSize);
 		}
 
 		set(oldEnd, value);
@@ -120,7 +120,7 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 		}
 
 		int oldStart = getStart();
-		int newStart = (oldStart + 1) % maxSize;
+		int newStart = (oldStart + 1) % bufferSize;
 
 		setStart(newStart);
 
@@ -147,7 +147,7 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 				try {
 					return get(at);
 				} finally {
-					at = (at + 1) % maxSize;
+					at = (at + 1) % bufferSize;
 				}
 			}
 

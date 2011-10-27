@@ -32,33 +32,29 @@ public class DefaultQueueInContent<W> implements QueueInContent<W> {
 
 	protected ComponentStorage<Integer> positionStorage;
 
-	protected int maxSize;
+	protected int bufferSize;
 
-	public DefaultQueueInContent(PolicyUtil policy,
-			ComponentCollectionProvider<W> provider,
-			ComponentStorage<?> storage, int maxSize) {
+	public DefaultQueueInContent(PolicyUtil policy, ComponentCollectionProvider<W> provider,
+			ComponentStorage<?> storage, int bufferSize) {
 		this.provider = require(provider);
 		this.policy = require(policy);
-		this.positionStorage = storage
-				.getOtherwiseTypedStorage(POSITION_CONVERTER);
+		this.positionStorage = storage.getOtherwiseTypedStorage(POSITION_CONVERTER);
 		this.content = policy.getContent();
-		this.maxSize = maxSize;
+		this.bufferSize = bufferSize;
 	}
 
 	@Override
-	public DefaultQueueInContent<W> modify(
-			final PolicyModification<EditableQueueInContent<W>> modification)
+	public DefaultQueueInContent<W> modify(final PolicyModification<EditableQueueInContent<W>> modification)
 			throws PolicyModificationException {
 		Policy result = policy.modify(new PolicyModification<Policy>() {
 			@Override
 			public void modify(Policy newVersion) throws CMException {
-				modification.modify(new DefaultEditableQueueInContent<W>(
-						util(newVersion), provider, positionStorage, maxSize));
+				modification.modify(new DefaultEditableQueueInContent<W>(util(newVersion), provider,
+						positionStorage, bufferSize));
 			}
 		}, Policy.class);
 
-		return new DefaultQueueInContent<W>(util(result), provider,
-				positionStorage, maxSize);
+		return new DefaultQueueInContent<W>(util(result), provider, positionStorage, bufferSize);
 	}
 
 	private W get(int index) throws IndexOutOfBoundsException {
@@ -77,7 +73,7 @@ public class DefaultQueueInContent<W> implements QueueInContent<W> {
 
 			@Override
 			public boolean hasNext() {
-				return at < end;
+				return at != end;
 			}
 
 			@Override
@@ -89,7 +85,7 @@ public class DefaultQueueInContent<W> implements QueueInContent<W> {
 				try {
 					return get(at);
 				} finally {
-					at = (at + 1) % maxSize;
+					at = (at + 1) % bufferSize;
 				}
 			}
 
@@ -108,14 +104,13 @@ public class DefaultQueueInContent<W> implements QueueInContent<W> {
 		if (end >= start) {
 			return end - start;
 		} else {
-			return maxSize - start + end;
+			return bufferSize - start + end;
 		}
 	}
 
 	protected int getEnd() {
 		try {
-			return positionStorage.getComponent(content, POSITION_GROUP,
-					END_COMPONENT);
+			return positionStorage.getComponent(content, POSITION_GROUP, END_COMPONENT);
 		} catch (NoSuchComponentException e) {
 			return 0;
 		}
@@ -123,8 +118,7 @@ public class DefaultQueueInContent<W> implements QueueInContent<W> {
 
 	protected int getStart() {
 		try {
-			return positionStorage.getComponent(content, POSITION_GROUP,
-					START_COMPONENT);
+			return positionStorage.getComponent(content, POSITION_GROUP, START_COMPONENT);
 		} catch (NoSuchComponentException e) {
 			return 0;
 		}
