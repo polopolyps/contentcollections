@@ -3,7 +3,6 @@ package com.polopoly.ps.tools.collections.componentcollection;
 import static com.polopoly.util.Require.require;
 
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.polopoly.ps.tools.collections.ComponentStorage;
@@ -72,8 +71,7 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 		try {
 			return positionStorage.getComponent(content, outerKey, component);
 		} catch (NoSuchComponentException e) {
-			LOGGER.log(Level.WARNING, "Internal error: " + component + " not present in " + outerKey + ": "
-					+ e);
+			// not an error. it happens in new queues.
 		}
 
 		return 0;
