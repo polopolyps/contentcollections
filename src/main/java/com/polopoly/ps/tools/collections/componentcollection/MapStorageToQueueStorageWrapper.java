@@ -14,8 +14,7 @@ import com.polopoly.ps.tools.collections.exception.NoSuchEntryException;
 import com.polopoly.util.content.ContentUtil;
 
 public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
-	private static final Logger LOGGER = Logger
-			.getLogger(MapStorageToQueueStorageWrapper.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(MapStorageToQueueStorageWrapper.class.getName());
 
 	private static final String START_COMPONENT = "start";
 	private static final String END_COMPONENT = "end";
@@ -27,12 +26,10 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 
 	private int bufferSize;
 
-	public MapStorageToQueueStorageWrapper(Storage<Integer, T> delegate,
-			ComponentStorage<?> storage, ContentUtil content, String outerKey,
-			int bufferSize) {
+	public MapStorageToQueueStorageWrapper(Storage<Integer, T> delegate, ComponentStorage<?> storage,
+			ContentUtil content, String outerKey, int bufferSize) {
 		this.delegate = require(delegate);
-		this.positionStorage = require(storage).getOtherwiseTypedStorage(
-				new IntegerConverter());
+		this.positionStorage = require(storage).getOtherwiseTypedStorage(new IntegerConverter());
 		this.content = require(content);
 		this.outerKey = require(outerKey);
 		this.bufferSize = bufferSize;
@@ -42,8 +39,8 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 		try {
 			return delegate.get(index);
 		} catch (NoSuchEntryException e) {
-			throw new IndexOutOfBoundsException("Attempt to get element "
-					+ index + " in " + this + ": " + e.toString());
+			throw new IndexOutOfBoundsException("Attempt to get element " + index + " in " + this + ": "
+					+ e.toString());
 		}
 	}
 
@@ -75,8 +72,8 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 		try {
 			return positionStorage.getComponent(content, outerKey, component);
 		} catch (NoSuchComponentException e) {
-			LOGGER.log(Level.WARNING, "Internal error: " + component
-					+ " not present in " + outerKey + ": " + e);
+			LOGGER.log(Level.WARNING, "Internal error: " + component + " not present in " + outerKey + ": "
+					+ e);
 		}
 
 		return 0;
@@ -135,7 +132,7 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 
 			@Override
 			public boolean hasNext() {
-				return at < end;
+				return at != end;
 			}
 
 			@Override
@@ -173,7 +170,6 @@ public class MapStorageToQueueStorageWrapper<T> implements QueueStorage<T> {
 
 		result.append("]");
 
-		return "List in " + outerKey + " in " + content + ": "
-				+ result.toString();
+		return "List in " + outerKey + " in " + content + ": " + result.toString();
 	}
 }

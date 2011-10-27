@@ -72,18 +72,19 @@ public class QueueInQueueIntegrationTest extends AbstractContentInQueueIntegrati
 				queue.push(0);
 				queue.pop();
 
-				queue.push(1);
-				queue.push(2);
+				for (int i = 0; i <= getMaxSize(); i++) {
+					queue.push(i + 1);
+				}
+
+				Assert.assertEquals(getMaxSize(), queue.size());
 
 				Iterator<Integer> it = queue.iterator();
 
-				Assert.assertTrue(it.hasNext());
-				Assert.assertEquals((Integer) 1, it.next());
+				for (int i = 0; i < getMaxSize(); i++) {
+					Assert.assertTrue(it.hasNext());
+					Assert.assertEquals((Integer) (i + 2), it.next());
+				}
 
-				Assert.assertTrue(it.hasNext());
-				Assert.assertEquals((Integer) 2, it.next());
-
-				Assert.assertFalse(it.hasNext());
 			}
 		});
 	}
