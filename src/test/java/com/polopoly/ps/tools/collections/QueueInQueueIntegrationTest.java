@@ -20,7 +20,7 @@ public class QueueInQueueIntegrationTest extends AbstractContentInQueueIntegrati
 	@Override
 	protected QueueInContent<QueueStorage<Integer>> createQueue() {
 		QueueStorageProvider<Integer> componentCollectionProvider = new QueueStorageProvider<Integer>(
-				new DefaultComponentStorage<Integer>(new IntegerConverter()), getMaxSize());
+				new DefaultComponentStorage<Integer>("aPrefix", new IntegerConverter()), getMaxSize());
 
 		return new DefaultQueueInContent<QueueStorage<Integer>>(policy, componentCollectionProvider,
 				componentCollectionProvider.getStorage(), getMaxSize() + 1);

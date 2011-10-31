@@ -61,4 +61,7 @@ public class DefaultMapInContent<W> implements MapInContent<W> {
 		return provider.keys(content);
 	}
 
+	public String toString() {
+		return "map in " + policy + " (collection provider: " + provider + ")";
+	}
 }

@@ -15,16 +15,14 @@ import com.polopoly.ps.tools.collections.incontent.EditableListInContent;
 import com.polopoly.ps.tools.collections.incontent.ListInContent;
 import com.polopoly.util.policy.PolicyModification;
 
-public class ListInListIntegrationTest extends
-		AbstractContentInListIntegrationTest<ListStorage<Integer>> {
+public class ListInListIntegrationTest extends AbstractContentInListIntegrationTest<ListStorage<Integer>> {
 
 	@Override
 	protected ListInContent<ListStorage<Integer>> createList() {
 		ListStorageProvider<Integer> componentCollectionProvider = new ListStorageProvider<Integer>(
-				new DefaultComponentStorage<Integer>(new IntegerConverter()));
+				new DefaultComponentStorage<Integer>("prefix", new IntegerConverter()));
 
-		return new DefaultListInContent<ListStorage<Integer>>(policy,
-				componentCollectionProvider,
+		return new DefaultListInContent<ListStorage<Integer>>(policy, componentCollectionProvider,
 				componentCollectionProvider.getStorage());
 	}
 
@@ -42,56 +40,50 @@ public class ListInListIntegrationTest extends
 
 	@Test
 	public void testAddRemove() throws Exception {
-		list = list
-				.modify(new PolicyModification<EditableListInContent<ListStorage<Integer>>>() {
+		list = list.modify(new PolicyModification<EditableListInContent<ListStorage<Integer>>>() {
 
-					@Override
-					public void modify(
-							EditableListInContent<ListStorage<Integer>> newVersion)
-							throws CMException {
-						ListStorage<Integer> list = newVersion.add();
+			@Override
+			public void modify(EditableListInContent<ListStorage<Integer>> newVersion) throws CMException {
+				ListStorage<Integer> list = newVersion.add();
 
-						list.add(1);
-						list.add(2);
+				list.add(1);
+				list.add(2);
 
-						Assert.assertEquals(2, list.size());
+				Assert.assertEquals(2, list.size());
 
-						list.remove(0);
+				list.remove(0);
 
-						Assert.assertEquals((Integer) 2, list.get(0));
-						Assert.assertEquals(1, list.size());
+				Assert.assertEquals((Integer) 2, list.get(0));
+				Assert.assertEquals(1, list.size());
 
-						list.remove(0);
+				list.remove(0);
 
-						Assert.assertTrue(list.isEmpty());
-					}
-				});
+				Assert.assertTrue(list.isEmpty());
+			}
+		});
 	}
 
 	@Test
 	public void testIterator() throws Exception {
-		list = list
-				.modify(new PolicyModification<EditableListInContent<ListStorage<Integer>>>() {
+		list = list.modify(new PolicyModification<EditableListInContent<ListStorage<Integer>>>() {
 
-					@Override
-					public void modify(
-							EditableListInContent<ListStorage<Integer>> newVersion)
-							throws CMException {
-						ListStorage<Integer> list = newVersion.add();
+			@Override
+			public void modify(EditableListInContent<ListStorage<Integer>> newVersion) throws CMException {
+				ListStorage<Integer> list = newVersion.add();
 
-						list.add(1);
-						list.add(2);
+				list.add(1);
+				list.add(2);
 
-						Iterator<Integer> it = list.iterator();
+				Iterator<Integer> it = list.iterator();
 
-						Assert.assertTrue(it.hasNext());
-						Assert.assertEquals((Integer) 1, it.next());
+				Assert.assertTrue(it.hasNext());
+				Assert.assertEquals((Integer) 1, it.next());
 
-						Assert.assertTrue(it.hasNext());
-						Assert.assertEquals((Integer) 2, it.next());
+				Assert.assertTrue(it.hasNext());
+				Assert.assertEquals((Integer) 2, it.next());
 
-						Assert.assertFalse(it.hasNext());
-					}
-				});
+				Assert.assertFalse(it.hasNext());
+			}
+		});
 	}
 }

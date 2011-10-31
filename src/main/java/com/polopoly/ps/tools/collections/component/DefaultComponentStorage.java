@@ -15,8 +15,7 @@ import com.polopoly.util.collection.FetchingIterator;
 import com.polopoly.util.content.ContentUtil;
 
 public class DefaultComponentStorage<T> implements ComponentStorage<T> {
-	private static final Logger LOGGER = Logger
-			.getLogger(DefaultComponentStorage.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DefaultComponentStorage.class.getName());
 
 	private String prefix;
 	private Converter<T> converter;
@@ -31,8 +30,7 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 	}
 
 	@Override
-	public void setComponent(ContentUtil content, String group,
-			String component, T value) {
+	public void setComponent(ContentUtil content, String group, String component, T value) {
 		String stringValue;
 
 		if (value == null) {
@@ -44,8 +42,7 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 		setNakedComponent(content, group, component, stringValue);
 	}
 
-	private void setNakedComponent(ContentUtil content, String group,
-			String component, String stringValue) {
+	private void setNakedComponent(ContentUtil content, String group, String component, String stringValue) {
 		content.setComponent(prefix + group, component, stringValue);
 	}
 
@@ -57,23 +54,19 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 		try {
 			return converter.fromString(result);
 		} catch (ConversionException e) {
-			LOGGER.log(
-					Level.WARNING,
-					"While getting component " + group + ":" + component
-							+ " in " + this + " for " + content + ": "
-							+ e.getMessage(), e);
+			LOGGER.log(Level.WARNING, "While getting component " + group + ":" + component + " in " + this
+					+ " for " + content + ": " + e.getMessage(), e);
 
 			throw new NoSuchComponentException(e);
 		}
 	}
 
-	private String getNakedComponent(ContentUtil content, String group,
-			String component) throws NoSuchComponentException {
+	private String getNakedComponent(ContentUtil content, String group, String component)
+			throws NoSuchComponentException {
 		String result = content.getComponent(prefix + group, component);
 
 		if (result == null) {
-			throw new NoSuchComponentException(group + ":" + component
-					+ " did not exist in " + content);
+			throw new NoSuchComponentException(group + ":" + component + " did not exist in " + content);
 		}
 
 		return result;
@@ -88,8 +81,7 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 	}
 
 	@Override
-	public void clearComponent(ContentUtil content, String group,
-			String component) {
+	public void clearComponent(ContentUtil content, String group, String component) {
 		setComponent(content, group, component, null);
 	}
 
@@ -104,7 +96,7 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 				while (at < allGroups.length) {
 					try {
 						if (allGroups[at].startsWith(prefix)) {
-							return allGroups[at];
+							return allGroups[at].substring(prefix.length());
 						}
 					} finally {
 						at++;
@@ -118,11 +110,9 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 	}
 
 	@Override
-	public Iterator<String> components(final ContentUtil content,
-			final String group) {
+	public Iterator<String> components(final ContentUtil content, final String group) {
 		return new FetchingIterator<String>() {
-			private String[] componentArray = content.getComponentNames(prefix
-					+ group);
+			private String[] componentArray = content.getComponentNames(prefix + group);
 			private int at = 0;
 
 			@Override
@@ -138,8 +128,7 @@ public class DefaultComponentStorage<T> implements ComponentStorage<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> ComponentStorage<O> getOtherwiseTypedStorage(
-			Converter<O> converter) {
+	public <O> ComponentStorage<O> getOtherwiseTypedStorage(Converter<O> converter) {
 		if (converter instanceof ContentIdConverter) {
 			return (ComponentStorage<O>) new ReferenceComponentStorage(prefix);
 		} else {
