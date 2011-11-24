@@ -8,9 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.polopoly.cm.client.CMException;
+import com.polopoly.ps.service.NoSuchServiceException;
 import com.polopoly.ps.test.AbstractIntegrationTest;
 import com.polopoly.ps.test.client.ClientInitializer;
-import com.polopoly.ps.test.client.NoSuchServiceException;
 import com.polopoly.ps.test.client.PolopolyTestClientInitializer;
 import com.polopoly.ps.tools.collections.incontent.EditableQueueInContent;
 import com.polopoly.ps.tools.collections.incontent.QueueInContent;
